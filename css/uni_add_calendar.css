@@ -1,0 +1,75 @@
+.uni_calendar{
+  width: 100%;
+}
+
+.uni_calendar th, .uni_calendar td{
+  padding: 8px;
+  background-color: #FFF;
+  text-align: center;
+  border: 1px solid #CCC;
+}
+
+/* 行の最初のtdは日曜日なため赤く */
+.uni_calendar th:first-of-type, .uni_calendar td:first-of-type{
+  background-color: #ffefef;
+  color: #FF0000;
+  font-weight: bold;
+}
+.uni_calendar .holiday{
+  background-color: #ffefef;
+  color: #FF0000;
+  font-weight: bold;
+}
+/* 行の最後のtdは土曜日なため青く */
+.uni_calendar th:last-of-type, .uni_calendar td:last-of-type{
+  background-color: #ededff;
+  color: #0000FF;
+  font-weight: bold;
+}
+
+/* 今日の日付 */
+.uni_calendar td.today{
+  background-color: #fbffa3;
+  font-weight: bold;
+}
+
+.c-calendar_wrap{
+  max-width: 600px;
+}
+#calendar{
+  max-width: 100%;
+}
+
+.holiday-name{
+  font-size: 10px;
+}
+.fc-button{
+  padding: 0.2em 0.35em;
+}
+.fc-button .fc-icon{
+  font-size: 1.2em;
+}
+.fc-toolbar h2{
+  font-size: 1.2em;
+}
+.fc-toolbar.fc-header-toolbar{
+  margin-bottom: 0.9em;
+}
+td.fc-sat {
+  background-color: #eaf4ff;
+}
+td.fc-sun {
+  background-color: #ffeaea;
+}
+td.fc-sun, td.fc-hol {
+  background-color: #ffeaea;
+}
+
+.fc-right{
+  opacity: 0;
+}
+
+.fc-event-container{
+  text-align: center;
+  cursor: pointer;
+}
