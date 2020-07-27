@@ -75,6 +75,7 @@ class AddCalendar{
   ?>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      
       var calendarEl = document.getElementById('calendar');
       var date = new UltraDate();
       var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -133,6 +134,10 @@ class AddCalendar{
               <td><input type="text" name="uni_cal_field[slug]" class="field_data uni_cal_field_slug" value="<?php echo $uni_cal_fields[0];?>"></td>
             </tr>
             <tr>
+              <th>イベントタクソノミー名（スラッグ）</th>
+              <td><input type="text" name="uni_cal_field[tax]" class="field_data uni_cal_field_tax" value="<?php echo $uni_cal_fields[2];?>"></td>
+            </tr>
+            <tr>
               <th>カスタムフィールド名</th>
               <td><input type="text" name="uni_cal_field[date]" class="field_data uni_cal_field_date" value="<?php echo $uni_cal_fields[1];?>"></td>
             </tr>
@@ -164,8 +169,9 @@ class AddCalendar{
           var arr = [];
           var slugVal = $('.uni_cal_field_slug').val();
           var dateVal = $('.uni_cal_field_date').val();
+          var taxVal = $('.uni_cal_field_tax').val();
 
-          arr.push(slugVal,dateVal);
+          arr.push(slugVal,dateVal,taxVal);
           fieldObj = arr;   
 
           $.ajax({
@@ -214,6 +220,7 @@ class AddCalendar{
     $uni_cal_fields = $this->get_settings();
     $post_type = $uni_cal_fields[0];
     $loop_field = $uni_cal_fields[1];
+    $tax_name = $uni_cal_fields[2];
     //直近4ヵ月のデータ取得
     global $post;
     $now = date_i18n('Y/m/d');
@@ -237,30 +244,36 @@ class AddCalendar{
     );
     $query = new WP_Query($args);
 
+    $names = [];
+    $slugs = [];
     $date_arr = []; 
     if ($query->have_posts()) : 
       while ($query->have_posts()) : $query->the_post();
+        global $post;
         $date = [];
-        $title = [];
         $results= [];
-        // $loops = get_post_meta( $post->ID, 'loop_agenda' , false );
         $loops = SCF::get($loop_field);
+        
+        //イベント名とCSSクラス用のスラッグを作る
+        $terms = get_the_terms($post->ID, $tax_name);
+        foreach($terms as $term){
+          $name = esc_html($term->name);
+          $slug = esc_html($term->slug);
+        }
 
         foreach ((array)$loops as $loop) {
           $date[] = date_i18n( 'Y-m-d', strtotime( $loop['date'] ) );
-          $w = date_i18n( 'w', strtotime( $loop['date'] ) );
-          $title[] = get_the_title();
-          $results[] = $week_name[$w];
         }
         $data = array (
           'date' => $date,
-          'title' => $title
+          'slug' => $slug,
+          'name' => $name
         );
         $date_arr[] = $data;
       endwhile;
     endif;
     wp_reset_postdata();
-    
+
     //複数日程を分割してバラバラに配列化
     $split_date = [];
     $date_arr2 = [];
@@ -271,7 +284,8 @@ class AddCalendar{
           $data2 = array (
             'start' => $split_post['date'][$i],
             'end' => $split_post['date'][$i],
-            'title' => '○'
+            'title' => $split_post['name'],
+            'classNames' => $split_post['slug']
           );
           $date_arr2[] = $data2;
         }
@@ -279,27 +293,31 @@ class AddCalendar{
         $data2 = array (
           'start' => $split_post['date'][0],
           'end' => $split_post['date'][0],
-          'title' => '○'
+          'title' => $split_post['name'],
+          'classNames' => $split_post['slug']
         );
         $date_arr2[] = $data2;
       }
     }
 
-    //日付の重複チェックしてあれば削除
-    $tmp = [];
-    $unique_data = [];
-    foreach ($date_arr2 as $post){
-        if (!in_array($post['start'], $tmp)) {
-          $tmp[] = $post['start'];
-          $unique_data[] = $post;
-        }
-    }
+
+
     //日付順にソート
-    foreach ((array) $unique_data as $key => $value) {
+    foreach ((array) $date_arr2 as $key => $value) {
       $sort[$key] = $value;
     }
-    array_multisort($sort, SORT_ASC, $unique_data);
-    $results = json_encode($unique_data);
+    array_multisort($sort, SORT_ASC, $date_arr2);
+
+
+    //配列の重複削除
+    $unique_arr = array_reduce($date_arr2, function($carry, $item) {
+      if (!in_array($item, $carry)) {
+        $carry[] = $item;
+      }
+      return $carry;
+    }, []);
+
+    $results = json_encode($unique_arr);
     return $results;
   }
 }

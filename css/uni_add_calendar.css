@@ -73,3 +73,24 @@ td.fc-sun, td.fc-hol {
   text-align: center;
   cursor: pointer;
 }
+.fc-row:first-child table{
+  margin-bottom: 0;
+}
+
+.fc-widget-header{
+  background: #bbb;
+}
+.fc-event{
+  border: none;
+}
+.fc-event.special{
+  background: #d6000f;
+}
+
+.fc-event.experience{
+  background: #696fb4;
+}
+
+.fc-event.information{
+  background: #b4d70f;
+}
