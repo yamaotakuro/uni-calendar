@@ -39,15 +39,31 @@
 #calendar{
   max-width: 100%;
 }
+.fc-widget-header{
+  font-size: 13px;
+}
+.fc-widget-content{
+  background: #fff;
+}
 
 .holiday-name{
   font-size: 10px;
 }
 .fc-button{
-  padding: 0.2em 0.35em;
+  padding: 0.4em 0.55em 0.5em 0.55em;
+  border: none;
 }
 .fc-button .fc-icon{
   font-size: 1.2em;
+}
+.fc-button-group>.fc-button{
+  background: #444;
+}
+.fc-button-primary{
+  background: #d6000f;
+}
+.fc-button-group>.fc-button:not(:first-child){
+  border-left: 1px solid #666;
 }
 .fc-toolbar h2{
   font-size: 1.2em;
@@ -78,10 +94,14 @@ td.fc-sun, td.fc-hol {
 }
 
 .fc-widget-header{
-  background: #bbb;
+  background: #383838;
+  color: #fff;
 }
 .fc-event{
   border: none;
+}
+.fc-toolbar h2{
+  font-size: 20px;
 }
 .fc-event.special{
   background: #d6000f;
