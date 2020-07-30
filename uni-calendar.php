@@ -46,23 +46,27 @@ class AddCalendar{
 
   //JS読み込み
   public function load_scripts() {
-    wp_enqueue_script('jquery');
-    wp_enqueue_script('core' , plugin_dir_url(__FILE__) .'packages/core/main.min.js');
-    wp_enqueue_script('list' , plugin_dir_url(__FILE__) .'packages/list/main.min.js');
-    wp_enqueue_script('daygrid' , plugin_dir_url(__FILE__) .'packages/daygrid/main.min.js');
-    wp_enqueue_script('gcal' , plugin_dir_url(__FILE__) .'packages/google-calendar/main.min.js');
-    wp_enqueue_script('locales' , plugin_dir_url(__FILE__) .'packages/core/ja.js');
-    wp_enqueue_script('momentjs' , plugin_dir_url(__FILE__) .'js/moment.js');
-    wp_enqueue_script('ultradate' , plugin_dir_url(__FILE__) .'js/UltraDate.min.js');
-    wp_enqueue_script('ultradate_ja' , plugin_dir_url(__FILE__) .'js/UltraDate.ja.min.js');
+    if(is_post_type_archive( 'opencampus' ) ){
+      wp_enqueue_script('jquery');
+      wp_enqueue_script('core' , plugin_dir_url(__FILE__) .'packages/core/main.min.js');
+      wp_enqueue_script('list' , plugin_dir_url(__FILE__) .'packages/list/main.min.js');
+      wp_enqueue_script('daygrid' , plugin_dir_url(__FILE__) .'packages/daygrid/main.min.js');
+      wp_enqueue_script('gcal' , plugin_dir_url(__FILE__) .'packages/google-calendar/main.min.js');
+      wp_enqueue_script('locales' , plugin_dir_url(__FILE__) .'packages/core/ja.js');
+      wp_enqueue_script('momentjs' , plugin_dir_url(__FILE__) .'js/moment.js');
+      wp_enqueue_script('ultradate' , plugin_dir_url(__FILE__) .'js/UltraDate.min.js');
+      wp_enqueue_script('ultradate_ja' , plugin_dir_url(__FILE__) .'js/UltraDate.ja.min.js');
+    }
   }
 
   //CSS読み込み
   public function load_styles() {
-    wp_enqueue_style('core' , plugin_dir_url(__FILE__) .'packages/core/main.min.css');
-    wp_enqueue_style('list' , plugin_dir_url(__FILE__) .'packages/list/main.min.css');
-    wp_enqueue_style('daygrid' , plugin_dir_url(__FILE__) .'packages/daygrid/main.min.css');
-    wp_enqueue_style('uni_add_calendar' , plugin_dir_url(__FILE__) .'css/uni_add_calendar.css');
+    if(is_post_type_archive( 'opencampus' ) ){
+      wp_enqueue_style('core' , plugin_dir_url(__FILE__) .'packages/core/main.min.css');
+      wp_enqueue_style('list' , plugin_dir_url(__FILE__) .'packages/list/main.min.css');
+      wp_enqueue_style('daygrid' , plugin_dir_url(__FILE__) .'packages/daygrid/main.min.css');
+      wp_enqueue_style('uni_add_calendar' , plugin_dir_url(__FILE__) .'css/uni_add_calendar.css');
+    }
   }
   
   //FullCalendarの実行
