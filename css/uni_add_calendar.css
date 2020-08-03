@@ -46,6 +46,10 @@
   background: #fff;
 }
 
+.fc table{
+  margin-bottom: 0;
+}
+
 .holiday-name{
   font-size: 10px;
 }
@@ -113,4 +117,16 @@ td.fc-sun, td.fc-hol {
 
 .fc-event.information{
   background: #b4d70f;
+}
+
+@media only screen and (max-width: 767px){
+  .fc-toolbar h2{
+    font-size: 16px;
+  }
+  .fc-widget-header {
+    font-size: 11px;
+  }
+  .fc-button {
+    font-size: 12px;
+  }
 }

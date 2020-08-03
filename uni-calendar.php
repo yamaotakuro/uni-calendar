@@ -110,6 +110,7 @@ class AddCalendar{
             info.el.classList.add("fc-hol")
           }
         },
+        height: 'auto'
       });
 
       calendar.render();
