@@ -275,7 +275,7 @@ class AddCalendar{
         
         //イベント名とCSSクラス用のスラッグを作る
         $terms = get_the_terms($post->ID, $tax_name);
-        foreach($terms as $term){
+        foreach((array)$terms as $term){
           $name = esc_html($term->name);
           $slug = esc_html($term->slug);
         }
