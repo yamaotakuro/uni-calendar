@@ -252,6 +252,20 @@ class AddCalendar{
     $names = [];
     $slugs = [];
     $date_arr = []; 
+
+    //常時開催用の日程配列作成
+    $startDate = date('Y-m-d');
+    $endDate = date('Y-m-d', strtotime('+3 month'));
+    $diff = (strtotime($endDate) - strtotime($startDate)) / ( 60 * 60 * 24);
+    for($i = 0; $i <= $diff; $i++) {
+      $data = array (
+        'date' => array(date('Y-m-d', strtotime($startDate . '+' . $i . 'days'))),
+        'slug' => 'always',
+        'name' => '常時開催'
+      );
+      $always[] = $data;
+    }
+
     if ($query->have_posts()) : 
       while ($query->have_posts()) : $query->the_post();
         global $post;
@@ -265,7 +279,7 @@ class AddCalendar{
           $name = esc_html($term->name);
           $slug = esc_html($term->slug);
         }
-
+        
         foreach ((array)$loops as $loop) {
           $date[] = date_i18n( 'Y-m-d', strtotime( $loop['date'] ) );
         }
@@ -278,11 +292,14 @@ class AddCalendar{
       endwhile;
     endif;
     wp_reset_postdata();
+    
+    //常時開催と通常開催をの配列をマージ
+    $merge_results = array_merge($date_arr, $always); 
 
     //複数日程を分割してバラバラに配列化
     $split_date = [];
     $date_arr2 = [];
-    foreach($date_arr as $split_post){
+    foreach($merge_results as $split_post){
       $cnt = count($split_post['date']);
       if($cnt > 1){
         for($i=0; $i<$cnt; $i++){
@@ -305,14 +322,11 @@ class AddCalendar{
       }
     }
 
-
-
     //日付順にソート
     foreach ((array) $date_arr2 as $key => $value) {
       $sort[$key] = $value;
     }
     array_multisort($sort, SORT_ASC, $date_arr2);
-
 
     //配列の重複削除
     $unique_arr = array_reduce($date_arr2, function($carry, $item) {
